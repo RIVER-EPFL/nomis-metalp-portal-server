@@ -16,6 +16,7 @@ services:
       SSL_CERT_KEY: ${SSL_CERT_KEY}
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - web
     volumes:
