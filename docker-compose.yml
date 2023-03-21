@@ -6,11 +6,13 @@ services:
     command:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.directory=/configuration/"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
       - "--entrypoints.websecure.address=:443"
+      - "--log.level=DEBUG"
     environment:
       SSL_CERT_CRT: ${SSL_CERT_CRT}
       SSL_CERT_KEY: ${SSL_CERT_KEY}
@@ -21,6 +23,9 @@ services:
       - web
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yaml:/configuration/traefik.yml
+      - /etc/ssl:/etc/ssl
+
 
   nomis-portal:
     image: ghcr.io/river-epfl/nomis-data-portal:master
