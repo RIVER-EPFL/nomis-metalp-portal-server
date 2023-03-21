@@ -7,6 +7,13 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+    environment:
+      - SSL_CERT_CRT: ${SSL_CERT_CRT}
+      - SSL_CERT_KEY: ${SSL_CERT_KEY}
     ports:
       - "80:80"
     networks:
@@ -19,6 +26,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nomis_portal.rule=Host(`${NOMIS_HOSTNAME}`)"
+      - "traefik.http.routers.nomis_portal.tls=true"
       - "traefik.http.services.nomis_portal.loadbalancer.server.port=3838"
     environment:
       NOMIS_ENV: ${NOMIS_ENV}
@@ -40,6 +48,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.metalp_portal.rule=Host(`${METALP_HOSTNAME}`)"
+      - "traefik.http.routers.metalp_portal.tls=true"
       - "traefik.http.services.metalp_portal.loadbalancer.server.port=3838"
     environment:
       METALP_ENV: ${METALP_ENV}
