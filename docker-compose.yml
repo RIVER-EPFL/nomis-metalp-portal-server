@@ -30,10 +30,10 @@ services:
     networks:
       - web
     volumes:
-      - ./nomis-data:/srv/shiny-server/data
-      - ./nomis-protocols:/srv/shiny-server/www/protocols
-      - ./nomis-db_backups:/srv/shiny-server/db_backups
-      - ./nomis-log:/srv/shiny-server/log
+      - ./nomis/data:/srv/shiny-server/data
+      - ./nomis/protocols:/srv/shiny-server/www/protocols
+      - ./nomis/db_backups:/srv/shiny-server/db_backups
+      - ./nomis/log:/srv/shiny-server/log
 
   metalp-portal:
     image: ghcr.io/river-epfl/metalp-data-portal:master
@@ -53,8 +53,8 @@ services:
     networks:
       - web
     volumes:
-      - ./metalp-data:/srv/shiny-server/data
-      - ./metalp-db_backups:/srv/shiny-server/db_backups
+      - ./metalp/data:/srv/shiny-server/data
+      - ./metalp/db_backups:/srv/shiny-server/db_backups
     depends_on:
       - metalp-db
 
