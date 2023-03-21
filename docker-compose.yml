@@ -12,8 +12,8 @@ services:
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
       - "--entrypoints.websecure.address=:443"
     environment:
-      - SSL_CERT_CRT: ${SSL_CERT_CRT}
-      - SSL_CERT_KEY: ${SSL_CERT_KEY}
+      SSL_CERT_CRT: ${SSL_CERT_CRT}
+      SSL_CERT_KEY: ${SSL_CERT_KEY}
     ports:
       - "80:80"
     networks:
