@@ -49,33 +49,6 @@ services:
       - ./nomis/db_backups:/srv/shiny-server/db_backups
       - ./nomis/log:/srv/shiny-server/log
 
-  metalp-rstudio:
-    image: rocker/rstudio
-    container_name: "rstudio-server"
-    environment:
-      PASSWORD: ${METALP_RSTUDIO_PASSWORD}
-      METALP_ENV: ${METALP_ENV}
-      METALP_DB_HOSTNAME: ${METALP_DB_HOSTNAME}
-      METALP_DB_PORT: ${METALP_DB_PORT}
-      METALP_DB_USERNAME: ${METALP_DB_USERNAME}
-      METALP_DB_PASSWORD: ${METALP_DB_PASSWORD}
-      METALP_DB_NAME: ${METALP_DB_NAME}
-      METALP_NOREPLY_ADDRESS: ${METALP_NOREPLY_ADDRESS}
-      METALP_TO_ADDRESS: ${METALP_TO_ADDRESS}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.rstudio-server.rule=Host(`${METALP_HOSTNAME}`) && PathPrefix(`/rstudio`)"
-      - "traefik.http.middlewares.rstudio-server-path-strip.stripprefix.prefixes=/rstudio"
-      - "traefik.http.middlewares.rstudio-server-path-strip.stripprefix.forceSlash=false"
-      - "traefik.http.middlewares.rstudio-server-root-path-header.headers.customrequestheaders.X-RStudio-Root-Path=/rstudio"
-      - "traefik.http.routers.rstudio-server.middlewares=rstudio-server-path-strip,rstudio-server-root-path-header"
-      - "traefik.http.services.rstudio-server.loadbalancer.server.port=8787"
-      - "traefik.http.routers.rstudio-server.tls=true"
-    volumes:
-      - metalp-server-common:/home/rstudio/workspace
-    networks:
-      - web
-
   metalp-portal:
     image: ghcr.io/river-epfl/metalp-data-portal:master
     labels:
