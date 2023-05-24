@@ -73,7 +73,6 @@ services:
     networks:
       - web
     volumes:
-      - metalp-server-common:/srv/shiny-server
       - ./metalp/data:/srv/shiny-server/data
       - ./metalp/db_backups:/srv/shiny-server/db_backups
       # - ./app/modules:/srv/shiny-server/modules  # dev
@@ -112,7 +111,6 @@ services:
 volumes:
   nomis-db-data:
   metalp-db-data:
-  metalp-server-common:
 
 
 networks:
