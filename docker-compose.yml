@@ -28,7 +28,7 @@ services:
 
 
   nomis-portal:
-    image: ghcr.io/river-epfl/nomis-data-portal:master
+    image: ghcr.io/river-epfl/nomis-data-portal:develop
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nomis_portal.rule=Host(`${NOMIS_HOSTNAME}`)"
@@ -46,11 +46,16 @@ services:
     volumes:
       - ./nomis/data:/srv/shiny-server/data
       - ./nomis/protocols:/srv/shiny-server/www/protocols
-      - ./nomis/db_backups:/srv/shiny-server/db_backups
-      - ./nomis/log:/srv/shiny-server/log
+      # - ./nomis/db_backups:/srv/shiny-server/db_backups  # dev
+      # - ./nomis/log:/srv/shiny-server/log  # dev
+      # - ./app/modules:/srv/shiny-server/modules  # dev
+      # - ./app/start.sh:/srv/shiny-server/start.sh  # dev
+      # - ./app/app.R:/srv/shiny-server/app.R  # dev
 
   metalp-portal:
-    image: ghcr.io/river-epfl/metalp-data-portal:master
+    image: ghcr.io/river-epfl/metalp-data-portal:develop
+    #build:  # dev
+    #  context: ../metalp-data-portal  # dev
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.metalp_portal.rule=Host(`${METALP_HOSTNAME}`)"
@@ -70,7 +75,9 @@ services:
     volumes:
       - metalp-server-common:/srv/shiny-server
       - ./metalp/data:/srv/shiny-server/data
-      - ./metalp/db_backups:/srv/shiny-server/db_backups
+      # - ./metalp/db_backups:/srv/shiny-server/db_backups  # dev
+      # - ./app/modules:/srv/shiny-server/modules  # dev
+      # - ./app/start.sh:/srv/shiny-server/start.sh  # dev
     depends_on:
       - metalp-db
 
