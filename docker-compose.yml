@@ -46,8 +46,8 @@ services:
     volumes:
       - ./nomis/data:/srv/shiny-server/data
       - ./nomis/protocols:/srv/shiny-server/www/protocols
-      # - ./nomis/db_backups:/srv/shiny-server/db_backups  # dev
-      # - ./nomis/log:/srv/shiny-server/log  # dev
+      - ./nomis/db_backups:/srv/shiny-server/db_backups
+      - ./nomis/log:/srv/shiny-server/log
       # - ./app/modules:/srv/shiny-server/modules  # dev
       # - ./app/start.sh:/srv/shiny-server/start.sh  # dev
       # - ./app/app.R:/srv/shiny-server/app.R  # dev
@@ -75,7 +75,7 @@ services:
     volumes:
       - metalp-server-common:/srv/shiny-server
       - ./metalp/data:/srv/shiny-server/data
-      # - ./metalp/db_backups:/srv/shiny-server/db_backups  # dev
+      - ./metalp/db_backups:/srv/shiny-server/db_backups
       # - ./app/modules:/srv/shiny-server/modules  # dev
       # - ./app/start.sh:/srv/shiny-server/start.sh  # dev
     depends_on:
