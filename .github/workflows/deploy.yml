@@ -12,7 +12,6 @@ on:
 
 jobs:
   deploy:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: EPFL-ENAC/epfl-enac-deploy-action@main
