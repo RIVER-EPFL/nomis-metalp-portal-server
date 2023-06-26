@@ -26,7 +26,6 @@ services:
       - ./traefik.yaml:/configuration/traefik.yml
       - /etc/ssl:/etc/ssl
 
-
   nomis-portal:
     image: ghcr.io/river-epfl/nomis-data-portal:develop
     labels:
@@ -48,14 +47,9 @@ services:
       - ./nomis/protocols:/srv/shiny-server/www/protocols
       - ./nomis/db_backups:/srv/shiny-server/db_backups
       - ./nomis/log:/srv/shiny-server/log
-      # - ./app/modules:/srv/shiny-server/modules  # dev
-      # - ./app/start.sh:/srv/shiny-server/start.sh  # dev
-      # - ./app/app.R:/srv/shiny-server/app.R  # dev
 
   metalp-portal:
     image: ghcr.io/river-epfl/metalp-data-portal:develop
-    #build:  # dev
-    #  context: ../metalp-data-portal  # dev
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.metalp_portal.rule=Host(`${METALP_HOSTNAME}`)"
@@ -75,43 +69,6 @@ services:
     volumes:
       - ./metalp/data:/srv/shiny-server/data
       - ./metalp/db_backups:/srv/shiny-server/db_backups
-      # - ./app/modules:/srv/shiny-server/modules  # dev
-      # - ./app/start.sh:/srv/shiny-server/start.sh  # dev
-    depends_on:
-      - metalp-db
-
-  nomis-db:
-    image: mariadb:10.2.41
-    environment:
-      MYSQL_ROOT_PASSWORD: ${NOMIS_DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${NOMIS_DB_NAME}
-      MYSQL_USER: ${NOMIS_DB_USERNAME}
-      MYSQL_PASSWORD: ${NOMIS_DB_PASSWORD}
-    volumes:
-      - nomis-db-data:/var/lib/mysql
-    ports:
-      - 3306:3306
-    networks:
-      - web
-
-  metalp-db:
-    image: mariadb:10.2.41
-    environment:
-      MYSQL_ROOT_PASSWORD: ${METALP_DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${METALP_DB_NAME}
-      MYSQL_USER: ${METALP_DB_USERNAME}
-      MYSQL_PASSWORD: ${METALP_DB_PASSWORD}
-    volumes:
-      - metalp-db-data:/var/lib/mysql
-    ports:
-      - 3307:3306
-    networks:
-      - web
-
-volumes:
-  nomis-db-data:
-  metalp-db-data:
-
 
 networks:
   web:
