@@ -1,0 +1,75 @@
+version: "3"
+services:
+  traefik:
+    container_name: traefik
+    image: traefik:v2.9.6
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.directory=/configuration/"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--entrypoints.websecure.address=:443"
+      - "--log.level=DEBUG"
+    environment:
+      SSL_CERT_CRT: ${SSL_CERT_CRT}
+      SSL_CERT_KEY: ${SSL_CERT_KEY}
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.yaml:/configuration/traefik.yml
+      - /etc/ssl:/etc/ssl
+
+  nomis-portal:
+    image: ghcr.io/river-epfl/nomis-data-portal:develop
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nomis_portal.rule=Host(`${NOMIS_HOSTNAME}`)"
+      - "traefik.http.routers.nomis_portal.tls=true"
+      - "traefik.http.services.nomis_portal.loadbalancer.server.port=3838"
+    environment:
+      NOMIS_ENV: ${NOMIS_ENV}
+      NOMIS_DB_HOSTNAME: ${NOMIS_DB_HOSTNAME}
+      NOMIS_DB_PORT: ${NOMIS_DB_PORT}
+      NOMIS_DB_USERNAME: ${NOMIS_DB_USERNAME}
+      NOMIS_DB_PASSWORD: ${NOMIS_DB_PASSWORD}
+      NOMIS_DB_NAME: ${NOMIS_DB_NAME}
+    networks:
+      - web
+    volumes:
+      - ./nomis/data:/srv/shiny-server/data
+      - ./nomis/protocols:/srv/shiny-server/www/protocols
+      - ./nomis/db_backups:/srv/shiny-server/db_backups
+      - ./nomis/log:/srv/shiny-server/log
+
+  metalp-portal:
+    image: ghcr.io/river-epfl/metalp-data-portal:develop
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.metalp_portal.rule=Host(`${METALP_HOSTNAME}`)"
+      - "traefik.http.routers.metalp_portal.tls=true"
+      - "traefik.http.services.metalp_portal.loadbalancer.server.port=3838"
+    environment:
+      METALP_ENV: ${METALP_ENV}
+      METALP_DB_HOSTNAME: ${METALP_DB_HOSTNAME}
+      METALP_DB_PORT: ${METALP_DB_PORT}
+      METALP_DB_USERNAME: ${METALP_DB_USERNAME}
+      METALP_DB_PASSWORD: ${METALP_DB_PASSWORD}
+      METALP_DB_NAME: ${METALP_DB_NAME}
+      METALP_NOREPLY_ADDRESS: ${METALP_NOREPLY_ADDRESS}
+      METALP_TO_ADDRESS: ${METALP_TO_ADDRESS}
+    networks:
+      - web
+    volumes:
+      - ./metalp/data:/srv/shiny-server/data
+      - ./metalp/db_backups:/srv/shiny-server/db_backups
+
+networks:
+  web:
+    driver: bridge
