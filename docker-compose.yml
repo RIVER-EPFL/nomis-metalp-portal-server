@@ -27,7 +27,7 @@ services:
       - /etc/ssl:/etc/ssl
 
   nomis-portal:
-    image: ghcr.io/river-epfl/nomis-data-portal:develop
+    image: ghcr.io/river-epfl/nomis-data-portal:master
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.nomis_portal.rule=Host(`${NOMIS_HOSTNAME}`)"
@@ -49,7 +49,7 @@ services:
       - ./nomis/log:/srv/shiny-server/log
 
   metalp-portal:
-    image: ghcr.io/river-epfl/metalp-data-portal:develop
+    image: ghcr.io/river-epfl/metalp-data-portal:master
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.metalp_portal.rule=Host(`${METALP_HOSTNAME}`)"

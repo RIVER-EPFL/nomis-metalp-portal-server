@@ -1,0 +1,20 @@
+name: Docker
+
+# This workflow updates the CD pipeline on changes to master and develop
+
+on:
+  push:
+    branches: 
+      - master
+    # Publish semver tags as releases.
+    tags: [ 'v*.*.*' ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: EPFL-ENAC/epfl-enac-deploy-action@main
+        with:
+          ENAC_IT4R_CD_environment: "prod"
+          ENAC_IT4R_CD_deployment_id: ${{ secrets.DEPLOYMENT_PROD_ID }}
+          ENAC_IT4R_CD_deployment_secret: ${{ secrets.DEPLOYMENT_PROD_SECRET }}
