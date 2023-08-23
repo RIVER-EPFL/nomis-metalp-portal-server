@@ -25,7 +25,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.yaml:/configuration/traefik.yml
       - /etc/ssl:/etc/ssl
-
+    restart: unless-stopped
 
   nomis-portal:
     image: ghcr.io/river-epfl/nomis-data-portal:develop
@@ -51,6 +51,7 @@ services:
       # - ./app/modules:/srv/shiny-server/modules  # dev
       # - ./app/start.sh:/srv/shiny-server/start.sh  # dev
       # - ./app/app.R:/srv/shiny-server/app.R  # dev
+    restart: unless-stopped
 
   metalp-portal:
     image: ghcr.io/river-epfl/metalp-data-portal:develop
@@ -79,6 +80,7 @@ services:
       # - ./app/start.sh:/srv/shiny-server/start.sh  # dev
     depends_on:
       - metalp-db
+    restart: unless-stopped
 
   nomis-db:
     image: mariadb:10.2.41
@@ -93,6 +95,7 @@ services:
       - 3306:3306
     networks:
       - web
+    restart: unless-stopped
 
   metalp-db:
     image: mariadb:10.2.41
@@ -107,6 +110,7 @@ services:
       - 3307:3306
     networks:
       - web
+    restart: unless-stopped
 
 volumes:
   nomis-db-data:
